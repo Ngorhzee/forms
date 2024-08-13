@@ -27,58 +27,256 @@ class Homepage extends StatelessWidget {
   Homepage({super.key});
   List<FormModel> formList = [
     {
-      "key": "firstName",
-      "type": "textfield",
-      "input": true,
-      "label": "First Name",
-      "validate": {
-        "json": {
-          "if": [
-            {
-              "===": [
-                {"var": "input"},
-                "Bob"
+      "key": "page1",
+      "type": "panel",
+      "input": false,
+      "label": "Page 1",
+      "title": "Step 1",
+      "tableView": false,
+      "components": [
+        {
+          "key": "firstName",
+          "type": "textfield",
+          "input": true,
+          "label": "First Name",
+          "validate": {
+            "json": {
+              "if": [
+                {
+                  "===": [
+                    {
+                      "var": "input"
+                    },
+                    "Bob"
+                  ]
+                },
+                true,
+                "Your name must be 'Bob'!"
               ]
             },
-            true,
-            "Your name must be 'Bob'!"
-          ]
+            "maxWords": 1,
+            "minWords": 1,
+            "required": true,
+            "maxLength": 10,
+            "minLength": 2
+          },
+          "tableView": true,
+          "conditional": {
+            "show": true
+          },
+          "placeholder": "Please enter your first name",
+          "defaultValue": "James"
         },
-        "maxWords": 1,
-        "minWords": 1,
-        "required": true,
-        "maxLength": 10,
-        "minLength": 2
+        {
+          "key": "lastName",
+          "type": "textfield",
+          "input": true,
+          "label": "Last Name",
+          "errors": {
+            "maxWords": "{{field}} can only have one word",
+            "minWords": "{{field}} can only have one word",
+            "required": "{{ field }} is required. Try again.",
+            "maxLength": "{{ field }} is too long. Try again."
+          },
+          "validate": {
+            "maxWords": 1,
+            "minWords": 1,
+            "required": true,
+            "maxLength": 30,
+            "minLength": 2
+          },
+          "tableView": true
+        },
+        {
+          "key": "gender",
+          "data": {
+            "values": [
+              {
+                "label": "Male",
+                "value": "Male"
+              },
+              {
+                "label": "Female",
+                "value": "Female"
+              },
+              {
+                "label": "Other",
+                "value": "Other"
+              }
+            ]
+          },
+          "type": "select",
+          "input": true,
+          "label": "Gender",
+          "widget": "choicesjs",
+          "validate": {
+            "required": true
+          },
+          "tableView": true,
+          "placeholder": "Select Gender"
+        },
+        {
+          "key": "ageGrade",
+          "data": {
+            "values": [
+              {
+                "label": "less_1",
+                "value": "<1"
+              },
+              {
+                "label": "1_4",
+                "value": "1-4"
+              },
+              {
+                "label": "5_9",
+                "value": "5-9"
+              },
+              {
+                "label": "10_14",
+                "value": "10-14"
+              },
+              {
+                "label": "15_19",
+                "value": "15-19"
+              },
+              {
+                "label": "20_24",
+                "value": "20-24"
+              },
+              {
+                "label": "25_29",
+                "value": "25-29"
+              },
+              {
+                "label": "above_30",
+                "value": "30+"
+              }
+            ]
+          },
+          "type": "select",
+          "input": true,
+          "label": "Age ",
+          "widget": "choicesjs",
+          "validate": {
+            "required": true,
+            "onlyAvailableItems": true
+          },
+          "tableView": true
+        }
+      ],
+      "collapsible": false,
+      "saveOnEnter": false,
+      "scrollToTop": false,
+      "buttonSettings": {
+        "next": true,
+        "cancel": true,
+        "previous": true
       },
-      "tableView": true,
-      "conditional": {"show": true},
-      "placeholder": "Please enter your first name",
-      "defaultValue": "James"
+      "navigateOnEnter": false,
+      "breadcrumbClickable": true
     },
     {
-      "key": "gender",
-      "data": {
-        "values": [
-          {"label": "Male", "value": "male"},
-          {"label": "Female", "value": "female"},
-          {"label": "Other", "value": "other"}
-        ]
-      },
-      "type": "select",
-      "input": true,
-      "label": "Gender",
-      "widget": "choicesjs",
-      "validate": {"required": true},
-      "tableView": true,
-      "placeholder": "Select Gender"
-    },
-    {
-      "key": "submit",
-      "type": "button",
-      "input": true,
-      "label": "Submit",
+      "key": "page2",
+      "type": "panel",
+      "input": false,
+      "label": "Page 2",
+      "title": "Step 2",
       "tableView": false,
-      "disableOnInvalid": true
+      "components": [
+        {
+          "key": "pregnant",
+          "type": "selectboxes",
+          "input": true,
+          "label": "Pregnant",
+          "values": [
+            {
+              "label": "Yes",
+              "value": "Yes",
+              "shortcut": ""
+            },
+            {
+              "label": "No",
+              "value": "No",
+              "shortcut": ""
+            }
+          ],
+          "validate": {
+            "required": true
+          },
+          "inputType": "checkbox",
+          "tableView": false,
+          "conditional": {
+            "eq": "Female",
+            "show": true,
+            "when": "gender"
+          },
+          "defaultValue": {
+            "No": false,
+            "Yes": false
+          },
+          "optionsLabelPosition": "right"
+        },
+        {
+          "key": "breastFeeding",
+          "type": "selectboxes",
+          "input": true,
+          "label": "Breast feeding",
+          "values": [
+            {
+              "label": "Yes",
+              "value": "Yes",
+              "shortcut": ""
+            },
+            {
+              "label": "No",
+              "value": "No",
+              "shortcut": ""
+            }
+          ],
+          "inputType": "checkbox",
+          "tableView": false,
+          "conditional": {
+            "eq": "No",
+            "show": true,
+            "when": "pregnant"
+          },
+          "optionsLabelPosition": "right"
+        },
+        {
+          "key": "hivStatus",
+          "data": {
+            "values": [
+              {
+                "label": "Positive",
+                "value": "positive"
+              },
+              {
+                "label": "Negative",
+                "value": "negative"
+              },
+              {
+                "label": "Unknown",
+                "value": "unknown"
+              }
+            ]
+          },
+          "type": "select",
+          "input": true,
+          "label": "HIV Status",
+          "widget": "choicesjs",
+          "tableView": true
+        }
+      ],
+      "collapsible": false,
+      "saveOnEnter": false,
+      "scrollToTop": false,
+      "buttonSettings": {
+        "next": true,
+        "cancel": true,
+        "previous": true
+      },
+      "navigateOnEnter": false,
+      "breadcrumbClickable": true
     }
   ].map((e) => FormModel.fromJson(e)).toList();
   @override
