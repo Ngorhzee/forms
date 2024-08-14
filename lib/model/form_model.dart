@@ -6,9 +6,10 @@ class FormModel {
   final Map<String, dynamic>? validate;
   final bool? tableView;
   final List<SelectModel>? select;
+  final List<SelectModel>? selectboxes;
   final Conditional? conditional;
   final String? placeholder;
-  final String? defaultValue;
+  var defaultValue;
   final List<FormModel>? component;
 
   FormModel({
@@ -16,6 +17,7 @@ class FormModel {
     this.type,
     this.input,
     this.label,
+    this.selectboxes,
     this.validate,
     this.select,
     this.tableView,
@@ -37,6 +39,11 @@ class FormModel {
                 : List.from(json["data"]["values"])
                     .map((e) => SelectModel.fromJson(e))
                     .toList(),
+        selectboxes: json["values"] == null
+            ? []
+            : List.from(json["values"])
+                .map((e) => SelectModel.fromJson(e))
+                .toList(),
         component: json["components"] == null
             ? []
             : List.from(json["components"])

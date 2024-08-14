@@ -44,9 +44,7 @@ class Homepage extends StatelessWidget {
               "if": [
                 {
                   "===": [
-                    {
-                      "var": "input"
-                    },
+                    {"var": "input"},
                     "Bob"
                   ]
                 },
@@ -61,9 +59,7 @@ class Homepage extends StatelessWidget {
             "minLength": 2
           },
           "tableView": true,
-          "conditional": {
-            "show": true
-          },
+          "conditional": {"show": true},
           "placeholder": "Please enter your first name",
           "defaultValue": "James"
         },
@@ -91,27 +87,16 @@ class Homepage extends StatelessWidget {
           "key": "gender",
           "data": {
             "values": [
-              {
-                "label": "Male",
-                "value": "Male"
-              },
-              {
-                "label": "Female",
-                "value": "Female"
-              },
-              {
-                "label": "Other",
-                "value": "Other"
-              }
+              {"label": "Male", "value": "Male"},
+              {"label": "Female", "value": "Female"},
+              {"label": "Other", "value": "Other"}
             ]
           },
           "type": "select",
           "input": true,
           "label": "Gender",
           "widget": "choicesjs",
-          "validate": {
-            "required": true
-          },
+          "validate": {"required": true},
           "tableView": true,
           "placeholder": "Select Gender"
         },
@@ -119,59 +104,28 @@ class Homepage extends StatelessWidget {
           "key": "ageGrade",
           "data": {
             "values": [
-              {
-                "label": "less_1",
-                "value": "<1"
-              },
-              {
-                "label": "1_4",
-                "value": "1-4"
-              },
-              {
-                "label": "5_9",
-                "value": "5-9"
-              },
-              {
-                "label": "10_14",
-                "value": "10-14"
-              },
-              {
-                "label": "15_19",
-                "value": "15-19"
-              },
-              {
-                "label": "20_24",
-                "value": "20-24"
-              },
-              {
-                "label": "25_29",
-                "value": "25-29"
-              },
-              {
-                "label": "above_30",
-                "value": "30+"
-              }
+              {"label": "less_1", "value": "<1"},
+              {"label": "1_4", "value": "1-4"},
+              {"label": "5_9", "value": "5-9"},
+              {"label": "10_14", "value": "10-14"},
+              {"label": "15_19", "value": "15-19"},
+              {"label": "20_24", "value": "20-24"},
+              {"label": "25_29", "value": "25-29"},
+              {"label": "above_30", "value": "30+"}
             ]
           },
           "type": "select",
           "input": true,
           "label": "Age ",
           "widget": "choicesjs",
-          "validate": {
-            "required": true,
-            "onlyAvailableItems": true
-          },
+          "validate": {"required": true, "onlyAvailableItems": true},
           "tableView": true
         }
       ],
       "collapsible": false,
       "saveOnEnter": false,
       "scrollToTop": false,
-      "buttonSettings": {
-        "next": true,
-        "cancel": true,
-        "previous": true
-      },
+      "buttonSettings": {"next": true, "cancel": true, "previous": true},
       "navigateOnEnter": false,
       "breadcrumbClickable": true
     },
@@ -189,31 +143,14 @@ class Homepage extends StatelessWidget {
           "input": true,
           "label": "Pregnant",
           "values": [
-            {
-              "label": "Yes",
-              "value": "Yes",
-              "shortcut": ""
-            },
-            {
-              "label": "No",
-              "value": "No",
-              "shortcut": ""
-            }
+            {"label": "Yes", "value": "Yes", "shortcut": ""},
+            {"label": "No", "value": "No", "shortcut": ""}
           ],
-          "validate": {
-            "required": true
-          },
+          "validate": {"required": true},
           "inputType": "checkbox",
           "tableView": false,
-          "conditional": {
-            "eq": "Female",
-            "show": true,
-            "when": "gender"
-          },
-          "defaultValue": {
-            "No": false,
-            "Yes": false
-          },
+          "conditional": {"eq": "Female", "show": true, "when": "gender"},
+          "defaultValue": {"No": false, "Yes": false},
           "optionsLabelPosition": "right"
         },
         {
@@ -222,42 +159,36 @@ class Homepage extends StatelessWidget {
           "input": true,
           "label": "Breast feeding",
           "values": [
-            {
-              "label": "Yes",
-              "value": "Yes",
-              "shortcut": ""
-            },
-            {
-              "label": "No",
-              "value": "No",
-              "shortcut": ""
-            }
+            {"label": "Yes", "value": "Yes", "shortcut": ""},
+            {"label": "No", "value": "No", "shortcut": ""}
           ],
           "inputType": "checkbox",
           "tableView": false,
-          "conditional": {
-            "eq": "No",
-            "show": true,
-            "when": "pregnant"
-          },
+          "conditional": {"eq": "No", "show": true, "when": "pregnant"},
           "optionsLabelPosition": "right"
+        },
+        {
+          "label": "sick",
+          "optionsLabelPosition": "right",
+          "inline": false,
+          "tableView": false,
+          "values": [
+            {"label": "Yes", "value": "yes", "shortcut": ""},
+            {"label": "No", "value": "no", "shortcut": ""}
+          ],
+          "validate": {"required": true},
+          "validateWhenHidden": false,
+          "key": "sick",
+          "type": "radio",
+          "input": true
         },
         {
           "key": "hivStatus",
           "data": {
             "values": [
-              {
-                "label": "Positive",
-                "value": "positive"
-              },
-              {
-                "label": "Negative",
-                "value": "negative"
-              },
-              {
-                "label": "Unknown",
-                "value": "unknown"
-              }
+              {"label": "Positive", "value": "positive"},
+              {"label": "Negative", "value": "negative"},
+              {"label": "Unknown", "value": "unknown"}
             ]
           },
           "type": "select",
@@ -270,24 +201,45 @@ class Homepage extends StatelessWidget {
       "collapsible": false,
       "saveOnEnter": false,
       "scrollToTop": false,
-      "buttonSettings": {
-        "next": true,
-        "cancel": true,
-        "previous": true
-      },
+      "buttonSettings": {"next": true, "cancel": true, "previous": true},
       "navigateOnEnter": false,
       "breadcrumbClickable": true
+    },
+    {
+      "label": "yess",
+      "tableView": false,
+      "defaultValue": false,
+      "validate": {"required": true},
+      "validateWhenHidden": false,
+      "key": "checkbox",
+      "type": "checkbox",
+      "input": true
     }
   ].map((e) => FormModel.fromJson(e)).toList();
   @override
   Widget build(BuildContext context) {
+    GlobalKey<FormState> formKey = GlobalKey();
     return Scaffold(
         body: SafeArea(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 30, 16, 30),
         child: Form(
-          child: FormBuilder(
-            fields: formList,
+          key: formKey,
+          child: ListView(
+            children: [
+              Text("hola"),
+              ...List.generate(formList.length,
+                  (index) => FormBuilder(field: formList[index])),
+              MaterialButton(
+                onPressed: () {
+                  if (formKey.currentState!.validate()) {
+                    print("Validate");
+                  } else {}
+                },
+                textColor: Colors.black,
+                child: Text("Submit"),
+              )
+            ],
           ),
         ),
       ),

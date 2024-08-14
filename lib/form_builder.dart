@@ -3,47 +3,48 @@ import 'package:flutter/material.dart';
 import 'package:form_test/model/form_model.dart';
 import 'package:form_test/validators/form_validator.dart';
 
-class FormBuilder extends StatefulWidget {
-  const FormBuilder({super.key, required this.fields});
-  final List<FormModel> fields;
+class FormBuilder extends StatelessWidget {
+  const FormBuilder({super.key, required this.field});
+  final FormModel field;
 
-  @override
-  State<FormBuilder> createState() => _FormBuilderState();
-}
-
-class _FormBuilderState extends State<FormBuilder> {
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        ...List.generate(widget.fields.length, (index) {
-          FormModel field = widget.fields[index];
-
-          if (field.type == "textfield") {
-            return TextFieldWidget(field: field);
-          } else if (field.type == "select") {
-            return DropDownWidget(field: field);
-          } else if (field.type == "panel") {
-            Column(
-              children: [
-                ...List.generate(field.component?.length ?? 0, (index) {
-                  if (field.type == "textfield") {
-                    return TextFieldWidget(field: field);
-                  } else if (field.type == "select") {
-                    return DropDownWidget(field: field);
-                  } else {
-                    return SizedBox();
-                  }
-                })
-              ],
-            );
-          } else {
-            return SizedBox();
-          }
-          return SizedBox();
-        })
-      ],
-    );
+    if (field.type == "textfield") {
+      return TextFieldWidget(field: field);
+    } else if (field.type == "select") {
+      return DropDownWidget(field: field);
+    } else if (field.type == "panel") {
+      return Column(
+        children: [
+          //Text("heyy")
+          ...List.generate(field.component?.length ?? 0, (index) {
+            FormModel panelField = field.component![index];
+            if (panelField.type == "textfield") {
+              return TextFieldWidget(field: panelField);
+            } else if (panelField.type == "select") {
+              return DropDownWidget(field: panelField);
+            } else if (panelField.type == "selectboxes") {
+              return SelectBoxesWidget(field: panelField);
+            } else if (panelField.type == "radio") {
+              return RadioButtonWidget(field: panelField);
+            } else if (field.type == "checkbox") {
+              return CheckBoxWidget(field: field);
+            } else {
+              return SizedBox();
+            }
+          })
+        ],
+      );
+    } else if (field.type == "selectboxes") {
+      return SelectBoxesWidget(field: field);
+    } else if (field.type == "radio") {
+      return RadioButtonWidget(field: field);
+    } else if (field.type == "checkbox") {
+      return CheckBoxWidget(field: field);
+    } else {
+      return SizedBox();
+    }
+    // return SizedBox();
   }
 }
 
@@ -57,7 +58,8 @@ class TextFieldWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ValidatorFunction validator = generateValidator(json: field.validate ?? {});
+    ValidatorFunction validator =
+        generateValidator(json: field.validate ?? {}, name: field.label);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -114,6 +116,154 @@ class TextFieldWidget extends StatelessWidget {
   }
 }
 
+class RadioButtonWidget extends StatefulWidget {
+  const RadioButtonWidget({super.key, required this.field});
+  final FormModel field;
+  @override
+  State<RadioButtonWidget> createState() => _RadioButtonWidgetState();
+}
+
+class _RadioButtonWidgetState extends State<RadioButtonWidget> {
+  SelectModel? groupValue;
+  @override
+  Widget build(BuildContext context) {
+    ValidatorFunction validator = generateValidator(
+        json: widget.field.validate ?? {}, name: widget.field.label);
+    return FormField<SelectModel>(
+        validator: (value) => validator(
+              value?.value,
+            ),
+        builder: (state) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.field.label ?? "",
+                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              ...List.generate(
+                  widget.field.selectboxes?.length ?? 0,
+                  (index) => RadioListTile(
+                        title: Text(widget.field.selectboxes![index].label),
+                        groupValue: groupValue,
+                        value: widget.field.selectboxes![index],
+                        onChanged: (value) {
+                          groupValue = value;
+                          setState(() {});
+                        },
+                      )),
+              state.hasError
+                  ? Text(
+                      state.errorText ?? "",
+                      style: TextStyle(fontSize: 12, color: Colors.red),
+                    )
+                  : SizedBox(),
+            ],
+          );
+        });
+  }
+}
+
+class CheckBoxWidget extends StatefulWidget {
+  const CheckBoxWidget({super.key, required this.field});
+  final FormModel field;
+  @override
+  State<CheckBoxWidget> createState() => _CheckBoxWidgetState();
+}
+
+class _CheckBoxWidgetState extends State<CheckBoxWidget> {
+  bool isChecked = false;
+  @override
+  Widget build(BuildContext context) {
+    ValidatorFunction validator = generateValidator(
+        json: widget.field.validate ?? {}, name: widget.field.label);
+    return FormField<bool>(
+        validator: (value) => validator(value),
+        autovalidateMode: AutovalidateMode.always,
+        builder: (state) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CheckboxListTile(
+                value: isChecked,
+                title: Text(widget.field.label ?? ""),
+                onChanged: (value) {
+                  isChecked = value!;
+                  setState(() {});
+                },
+              ),
+              state.hasError
+                  ? Text(
+                      state.errorText ?? "",
+                      style: TextStyle(fontSize: 12, color: Colors.red),
+                    )
+                  : SizedBox(),
+            ],
+          );
+        });
+  }
+}
+
+class SelectBoxesWidget extends StatefulWidget {
+  const SelectBoxesWidget({super.key, required this.field});
+  final FormModel field;
+  @override
+  State<SelectBoxesWidget> createState() => _SelectBoxesWidgetState();
+}
+
+class _SelectBoxesWidgetState extends State<SelectBoxesWidget> {
+  List<SelectModel> selectedFields = [];
+  @override
+  Widget build(BuildContext context) {
+    ValidatorFunction validator = generateValidator(
+        json: widget.field.validate ?? {}, name: widget.field.label);
+    return FormField<SelectModel>(
+        validator: (value) => validator(value?.value),
+        builder: (state) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.field.label ?? "",
+                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              ...List.generate(
+                  widget.field.selectboxes?.length ?? 0,
+                  (index) => CheckboxListTile(
+                        value: selectedFields
+                            .contains(widget.field.selectboxes![index]),
+                        onChanged: (bool? value) {
+                          if (selectedFields
+                              .contains(widget.field.selectboxes![index])) {
+                            selectedFields
+                                .remove(widget.field.selectboxes![index]);
+                            setState(() {});
+                          } else {
+                            selectedFields
+                                .add(widget.field.selectboxes![index]);
+                            setState(() {});
+                          }
+                        },
+                        title: Text(widget.field.selectboxes![index].label),
+                      )),
+              state.hasError
+                  ? Text(
+                      state.errorText ?? "",
+                      style: TextStyle(fontSize: 12, color: Colors.red),
+                    )
+                  : SizedBox(),
+            ],
+          );
+        });
+  }
+}
+
 class DropDownWidget extends StatefulWidget {
   const DropDownWidget({super.key, required this.field});
   final FormModel field;
@@ -126,8 +276,8 @@ class _DropDownWidgetState extends State<DropDownWidget> {
   SelectModel? value;
   @override
   Widget build(BuildContext context) {
-    ValidatorFunction validator =
-        generateValidator(json: widget.field.validate ?? {});
+    ValidatorFunction validator = generateValidator(
+        json: widget.field.validate ?? {}, name: widget.field.label);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -149,6 +299,13 @@ class _DropDownWidgetState extends State<DropDownWidget> {
                   borderSide: BorderSide(color: Colors.grey, width: 2),
                   borderRadius: BorderRadius.circular(8),
                 ),
+                error: state.hasError
+                    ? Text(
+                        state.errorText ?? "",
+                        style: TextStyle(fontSize: 12, color: Colors.red),
+                      )
+                    : null,
+                errorStyle: TextStyle(fontSize: 12, color: Colors.red),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.grey, width: 2),
                   borderRadius: BorderRadius.circular(8),

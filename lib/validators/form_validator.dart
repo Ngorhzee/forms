@@ -1,8 +1,8 @@
-typedef ValidatorFunction = String? Function(String?);
+typedef ValidatorFunction = String? Function(dynamic);
 
 ValidatorFunction generateValidator(
     {required Map<String, dynamic> json, String? name}) {
-  return (String? input) {
+  return (dynamic input) {
     if (json["required"] != null) {
       if (json["required"] == true) {
         if (input == null || input.isEmpty) {
@@ -43,13 +43,15 @@ ValidatorFunction generateValidator(
       }
     }
 // 6. Handle custom equality validation from JSON
-    var condition = json['json']['if'];
-    if (condition != null && condition.length >= 2) {
-      var equalityCheck = condition[0];
-      var expectedValue = equalityCheck['==='][1];
-      var errorMessage = condition[2] ?? "Error";
-      if (input != expectedValue) {
-        return errorMessage;
+    if (json['json'] != null) {
+      var condition = json['json']['if'];
+      if (condition != null && condition.length >= 2) {
+        var equalityCheck = condition[0];
+        var expectedValue = equalityCheck['==='][1];
+        var errorMessage = condition[2] ?? "Error";
+        if (input != expectedValue) {
+          return errorMessage;
+        }
       }
     }
     return null;
