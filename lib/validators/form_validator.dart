@@ -1,3 +1,5 @@
+import 'package:form_test/model/form_model.dart';
+
 typedef ValidatorFunction = String? Function(dynamic);
 
 ValidatorFunction generateValidator(
@@ -5,8 +7,26 @@ ValidatorFunction generateValidator(
   return (dynamic input) {
     if (json["required"] != null) {
       if (json["required"] == true) {
-        if (input == null || input.isEmpty) {
-          return "$name cannot be Empty";
+        if (input == null) {
+          return "Input cannot be null";
+        } else {
+          if (input.runtimeType == bool) {
+            if (!input) {
+              return "Input must be checked";
+            }
+          } else if (input.runtimeType == List) {
+            if (input.isEmpty) {
+              return "You must select atleast one";
+            }
+          } else if (input.runtimeType == SelectModel) {
+            if (input == null) {
+              return "Input cannot be Empty";
+            }
+          } else {
+            if (input == null || input.isEmpty) {
+              return "Input cannot be Empty";
+            }
+          }
         }
       }
     }
@@ -16,6 +36,24 @@ ValidatorFunction generateValidator(
         return 'Input must be at least $minLength characters long!';
       }
     }
+    if (json['minSelectedCount'] != null) {
+      int minLength = json['minSelectedCount'];
+      print(input.runtimeType);
+      if (input.runtimeType == List<SelectModel>) {
+        if (input.length < minLength) {
+          return 'You must select at least $minLength options';
+        }
+      }
+    }
+    if (json['maxSelectedCount'] != null) {
+      int maxLength = json['maxSelectedCount'];
+      if (input.runtimeType == List<SelectModel>) {
+        if (input.length > maxLength) {
+          return 'You can only select $maxLength options';
+        }
+      }
+    }
+
 // 3. Handle maxLength validation
     if (json['maxLength'] != null) {
       int maxLength = json['maxLength'];

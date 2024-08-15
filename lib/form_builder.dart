@@ -130,9 +130,7 @@ class _RadioButtonWidgetState extends State<RadioButtonWidget> {
     ValidatorFunction validator = generateValidator(
         json: widget.field.validate ?? {}, name: widget.field.label);
     return FormField<SelectModel>(
-        validator: (value) => validator(
-              value?.value,
-            ),
+        validator: (value) => validator(groupValue),
         builder: (state) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,7 +179,8 @@ class _CheckBoxWidgetState extends State<CheckBoxWidget> {
     ValidatorFunction validator = generateValidator(
         json: widget.field.validate ?? {}, name: widget.field.label);
     return FormField<bool>(
-        validator: (value) => validator(value),
+        validator: (value) => validator(isChecked),
+        initialValue: isChecked,
         autovalidateMode: AutovalidateMode.always,
         builder: (state) {
           return Column(
@@ -220,8 +219,9 @@ class _SelectBoxesWidgetState extends State<SelectBoxesWidget> {
   Widget build(BuildContext context) {
     ValidatorFunction validator = generateValidator(
         json: widget.field.validate ?? {}, name: widget.field.label);
-    return FormField<SelectModel>(
-        validator: (value) => validator(value?.value),
+    return FormField<List<SelectModel>>(
+        validator: (value) => validator(value),
+        initialValue: selectedFields,
         builder: (state) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -273,7 +273,7 @@ class DropDownWidget extends StatefulWidget {
 }
 
 class _DropDownWidgetState extends State<DropDownWidget> {
-  SelectModel? value;
+  SelectModel? setValue;
   @override
   Widget build(BuildContext context) {
     ValidatorFunction validator = generateValidator(
@@ -289,7 +289,8 @@ class _DropDownWidgetState extends State<DropDownWidget> {
           height: 8,
         ),
         FormField<SelectModel>(
-          validator: (value) => validator(value?.value),
+          validator: (value) => validator(setValue),
+          initialValue: setValue,
           builder: (FormFieldState<SelectModel> state) {
             return InputDecorator(
               decoration: InputDecoration(
@@ -336,7 +337,7 @@ class _DropDownWidgetState extends State<DropDownWidget> {
                 //       color: Pallet.white,
                 //     ),
               ),
-              isEmpty: value == null,
+              // isEmpty: value == null,
               child: DropdownButtonHideUnderline(
                 child: DropdownButton(
                   isExpanded: true,
@@ -360,7 +361,7 @@ class _DropDownWidgetState extends State<DropDownWidget> {
                   borderRadius: BorderRadius.circular(4),
                   // iconSize: ScreenUtil().setHeight(25),
                   //iconEnabledColor: Pallet.hintColor,
-                  value: value,
+                  value: setValue,
                   isDense: true,
                   items: widget.field.select!.map((SelectModel value) {
                     return DropdownMenuItem<SelectModel>(
@@ -375,7 +376,7 @@ class _DropDownWidgetState extends State<DropDownWidget> {
                     );
                   }).toList(),
                   onChanged: (values) {
-                    value = values;
+                    setValue = values;
                     setState(() {});
                   },
                 ),

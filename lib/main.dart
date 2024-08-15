@@ -146,7 +146,9 @@ class Homepage extends StatelessWidget {
             {"label": "Yes", "value": "Yes", "shortcut": ""},
             {"label": "No", "value": "No", "shortcut": ""}
           ],
-          "validate": {"required": true},
+          "validate": {
+            "required": true,
+          },
           "inputType": "checkbox",
           "tableView": false,
           "conditional": {"eq": "Female", "show": true, "when": "gender"},
@@ -158,9 +160,16 @@ class Homepage extends StatelessWidget {
           "type": "selectboxes",
           "input": true,
           "label": "Breast feeding",
+          "validate": {
+            "required": true,
+            "minSelectedCount": 2,
+            "maxSelectedCount": 3,
+          },
           "values": [
             {"label": "Yes", "value": "Yes", "shortcut": ""},
-            {"label": "No", "value": "No", "shortcut": ""}
+            {"label": "No", "value": "No", "shortcut": ""},
+            {"label": "probaly", "value": "probaly", "shortcut": ""},
+            {"label": "meee", "value": "meee", "shortcut": ""},
           ],
           "inputType": "checkbox",
           "tableView": false,
